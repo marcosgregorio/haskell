@@ -10,4 +10,9 @@ step (Add e1 e2) = Add (step e1) e2
 step (And BFalse _) = Bfalse
 step (And BTrue e) = e
 step (And e1 e2) = And (step e1) e2
+
+step (If BFalse e1 e2) = e2
+step (If BTrue e1 e2) = e1
+step (If e e1 e2) = If (step e) e1 e2
+step (If e e1 e2) = If (step e) e1 e2
 step e = e
