@@ -2,6 +2,8 @@ module Interpreter where
 
 import Lexer
 
+isValue :: 
+
 step:: Expr -> Expr
 step (Add (Num n1) (Num n2)) = Num (n1 + n2)
 step (Add (Num n) e) = Add (Num n) (step e)
@@ -16,3 +18,8 @@ step (If BTrue e1 e2) = e1
 step (If e e1 e2) = If (step e) e1 e2
 step (If e e1 e2) = If (step e) e1 e2
 step e = e
+
+eval :: Expr -> Expr
+eval e 
+        | isValue e = e
+        | otherwise e = eval (step e)

@@ -1,0 +1,10 @@
+Sintaxe concreta: o código que o programdor escreve
+
+Sintaxe abstrata: representação interna da sintaxe (Expr)
+
+(\x M) é a abstração de x em M. ex: \x -> x + 1
+(M N) é a aplicação de M ao argumento N.
+Exemplos:
+  - (\x x) é a função identidade: a x faz corresponder x
+  - (\x (\y x)) é a função para cada x retorna uma outra função que para cada y retorna x
+
