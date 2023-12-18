@@ -63,3 +63,16 @@ lexSymbol cs = case span isSymb cs of
   ("=", rest)  -> TokenEq : lexer rest 
   (":", rest)  -> TokenColon : lexer rest 
   _ -> error "Lexical error: invalid symbol!"
+
+lexKW :: String -> [Token]
+lexKW cs = case span isAlpha cs of 
+  ("true", rest) -> TokenTrue : lexer rest 
+  ("false", rest) -> TokenFalse : lexer rest
+  ("if", rest) -> TokenIf : lexer rest 
+  ("then", rest) -> TokenThen : lexer rest 
+  ("else", rest) -> TokenElse : lexer rest 
+  ("let", rest) -> TokenLet : lexer rest 
+  ("in", rest) -> TokenIn : lexer rest 
+  ("Num", rest) -> TokenNumber : lexer rest 
+  ("Bool", rest) -> TokenBoolean : lexer rest 
+  (var, rest) -> TokenVar var : lexer rest 
