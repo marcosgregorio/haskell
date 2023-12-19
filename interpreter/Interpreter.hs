@@ -26,9 +26,18 @@ step (If e e1 e2) = If (step e) e1 e2
 -- propria expressão dentro do parenteses
 step (Paren e) = e
 
+-- Esta função avalia se é uma expressão lambda e
+-- se o e2 é um valor. Se o e2 for um valor, faz a substituição de e2
+-- pela variavel x. Ex: (\x -> x + 1) 2. O valor 2 substituiria o 'x'.
+-- Caso o contrario, a função irá reduzir ele até se tornar um valor.
 step (App (Lam x t b) e2) | isValue e2 = subst x e2 b 
                         | otherwise = (App (Lam x t b) (step e2))
-step e = e
+-- Apenas reduz a e1 até um valor.
+step (App e1 e2) = App (step e1) e2
+-- Cria uma variavel.
+step (Let v e1 e2) | isValue e1 = subst v e1 e2 
+                   | otherwise = Let v (step e1) e2
+step e = error (show e)
 
 -- Está função serve para pegar o valor de variaveis
 -- e substituir com um valor novo.
