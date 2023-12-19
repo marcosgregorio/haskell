@@ -54,7 +54,8 @@ subst x n (If e1 e2 e3) = If (subst x n e1) (subst x n e2) (subst x n e3)
 subst x n (Paren e) = Paren (subst x n e)
 subst x n (Let v e1 e2) = Let v (subst x n e1) (subst x n e2)
 subst x n e = e 
--- eval :: Expr -> Expr
--- eval e 
---         | isValue e = e
---         | otherwise e = eval (step e)
+
+-- eval( Add (Num 1) (Num 2))
+eval :: Expr -> Expr
+eval e | isValue e = e 
+       | otherwise = eval (step e)
