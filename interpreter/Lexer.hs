@@ -11,7 +11,12 @@ data Expr = BTrue
           | Nand Expr Expr
           | Nor Expr Expr
           | Xor Expr Expr
-          | Or Expr Expr
+          | Equal Expr Expr
+          | Different Expr Expr
+          | Greater Expr Expr
+          | GreaterThan Expr Expr
+          | Less Expr Expr
+          | LessThan Expr Expr
           | If Expr Expr Expr 
           | Var String
           | Lam String Ty Expr 

@@ -66,7 +66,7 @@ step (Equal e1 (Num n)) = Equal (step e1) (Num n)
 step (Equal (Num n) e2) = Equal (Num n) (step e2)                             
 step (Equal e1 e2) = Equal (step e1) (step e2)                                
 
-step (Diferente (Num n1) (Num n2)) = if (n1 /= n2) 
+step (Different (Num n1) (Num n2)) = if (n1 /= n2) 
                                         then 
                                           BTrue 
                                         else 
@@ -75,6 +75,35 @@ step (Different e1 (Num n)) = Different (step e1) (Num n)
 step (Different (Num n) e2) = Different (Num n) (step e2)                     
 step (Different e1 e2) = Different (step e1) (step e2)                        
 
+step (Greater e1 (Num n)) = Greater (step e1) (Num n)                             
+step (Greater (Num n) e2) = Greater (Num n) (step e2)                             
+step (Greater e1 e2) = Greater (step e1) (step e2)                                
+step (GreaterThan (Num n1) (Num n2)) = if (n1 >= n2) 
+                                        then 
+                                          BTrue 
+                                        else 
+                                          BFalse    
+step (GreaterThan e1 (Num n)) = GreaterThan (step e1) (Num n)                   
+step (GreaterThan (Num n) e2) = GreaterThan (Num n) (step e2)                   
+step (GreaterThan e1 e2) = GreaterThan (step e1) (step e2)                      
+
+step (Less (Num n1) (Num n2)) = if (n1 < n2) 
+                                  then 
+                                    BTrue 
+                                  else 
+                                    BFalse          
+step (Less e1 (Num n)) = Less (step e1) (Num n)                             
+step (Less (Num n) e2) = Less (Num n) (step e2)                             
+step (Less e1 e2) = Less (step e1) (step e2)                                
+
+step (LessThan (Num n1) (Num n2)) = if (n1 <= n2) 
+                                      then 
+                                        BTrue 
+                                      else 
+                                        BFalse    
+step (LessThan e1 (Num n)) = LessThan (step e1) (Num n)                   
+step (LessThan (Num n) e2) = LessThan (Num n) (step e2)                   
+step (LessThan e1 e2) = LessThan (step e1) (step e2)
 -- se for um parenteses, ele devolve a
 -- propria expressão dentro do parenteses
 step (Paren e) = e
