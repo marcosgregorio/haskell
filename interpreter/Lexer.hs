@@ -7,6 +7,11 @@ data Expr = BTrue
           | Num Int 
           | Add Expr Expr 
           | And Expr Expr 
+          | Or Expr Expr
+          | Nand Expr Expr
+          | Nor Expr Expr
+          | Xor Expr Expr
+          | Or Expr Expr
           | If Expr Expr Expr 
           | Var String
           | Lam String Ty Expr 
