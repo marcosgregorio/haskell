@@ -10,9 +10,21 @@ isValue (Lam _ _ _) = True
 isValue _ = False 
 
 step:: Expr -> Expr
+step (IsNull Null) = BTrue
+step (IsNull (Cons _ _)) = BFalse
+step (IsNull e1) = IsNull (step e1)
+
 step (Add (Num n1) (Num n2)) = Num (n1 + n2)
 step (Add (Num n) e) = Add (Num n) (step e)
 step (Add e1 e2) = Add (step e1) e2
+
+step (Mult (Num n1) (Num n2)) = Num (n1 * n2)
+step (Mult (Num n) e) = Mult (Num n) (step e) 
+step (Mult e1 e2) = Mult (step e1) e2         
+
+step (Sub (Num n1) (Num n2)) = Num (n1 - n2)
+step (Sub (Num n) e) = Sub (Num n) (step e) 
+step (Sub e1 e2) = Sub (step e1) e2         
 
 step (And BFalse _) = BFalse
 step (And BTrue e) = e

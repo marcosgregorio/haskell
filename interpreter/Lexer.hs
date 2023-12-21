@@ -5,7 +5,12 @@ import Data.Char
 data Expr = BTrue
           | BFalse 
           | Num Int 
+          | Null
+          | IsNull Expr
+          | Cons Expr Expr
           | Add Expr Expr 
+          | Mult Expr Expr 
+          | Sub Expr Expr 
           | And Expr Expr 
           | Or Expr Expr
           | Nand Expr Expr
@@ -25,6 +30,7 @@ data Expr = BTrue
           | Let String Expr Expr 
           deriving Show
 
+-- É usado no typechecker
 data Ty = TBool 
         | TNum 
         | TFun Ty Ty
@@ -40,6 +46,16 @@ data Token = TokenTrue
            | TokenElse
            | TokenVar String 
            | TokenLam
+           | TokenOr   
+           | TokenNand  
+           | TokenNor
+           | TokenXor
+           | TokenEqual   
+           | TokenDifferent   
+           | TokenGreater   
+           | TokenGreaterThan   
+           | TokenLess   
+           | TokenLessThen   
            | TokenArrow
            | TokenLParen
            | TokenRParen
@@ -49,10 +65,11 @@ data Token = TokenTrue
            | TokenColon
            | TokenBoolean 
            | TokenNumber
+
            deriving (Show, Eq)
 
 isSymb :: Char -> Bool 
-isSymb c = c `elem` "+&\\->()=:"
+isSymb c = c `elem` "+&|-\\->()=:</"
 
 lexer :: String -> [Token]
 lexer [] = [] 
@@ -75,6 +92,16 @@ lexSymbol cs = case span isSymb cs of
                  ("\\", rest) -> TokenLam : lexer rest 
                  ("->", rest) -> TokenArrow : lexer rest 
                  ("=", rest)  -> TokenEq : lexer rest 
+                 ("||", rest) -> TokenOr : lexer rest  
+                 ("-&&", rest) -> TokenNand : lexer rest  
+                 ("-||", rest) -> TokenNor : lexer rest  
+                 ("-&|", rest) -> TokenXor : lexer rest  
+                 ("==", rest)  -> TokenEqual :lexer rest  
+                 ("/=", rest)  -> TokenDifferent :lexer rest  
+                 (">", rest)  -> TokenGreater :lexer rest  
+                 (">=", rest)  -> TokenGreaterThan :lexer rest  
+                 ("<", rest)  -> TokenLess :lexer rest  
+                 ("<=", rest)  -> TokenLessThen : lexer rest
                  (":", rest)  -> TokenColon : lexer rest 
                  _ -> error "Lexical error: invalid symbol!"
 
