@@ -11,8 +11,16 @@ isValue _ = False
 
 step:: Expr -> Expr
 step (IsNull Null) = BTrue
-step (IsNull (Cons _ _)) = BFalse
+step (IsNull (Cons _ _ _)) = BFalse
 step (IsNull e1) = IsNull (step e1)
+
+step (Head (Cons x _ _)) = x 
+step (Head Null) = error "Cannot take the head of an empty list"
+step (Head e1) = Head (step e1)
+
+step (Tail (Cons _ y z)) = Cons y z Null
+step (Tail Null) = error "Cannot take the tail of an empty list"
+step (Tail e1) = Tail (step e1)
 
 step (Add (Num n1) (Num n2)) = Num (n1 + n2)
 step (Add (Num n) e) = Add (Num n) (step e)

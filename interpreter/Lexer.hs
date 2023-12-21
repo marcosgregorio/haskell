@@ -7,7 +7,9 @@ data Expr = BTrue
           | Num Int 
           | Null
           | IsNull Expr
-          | Cons Expr Expr
+          | Cons Expr Expr Expr
+          | Head Expr
+          | Tail Expr
           | Add Expr Expr 
           | Mult Expr Expr 
           | Sub Expr Expr 
@@ -55,7 +57,7 @@ data Token = TokenTrue
            | TokenGreater   
            | TokenGreaterThan   
            | TokenLess   
-           | TokenLessThen   
+           | TokenLessThan   
            | TokenArrow
            | TokenLParen
            | TokenRParen
@@ -65,6 +67,11 @@ data Token = TokenTrue
            | TokenColon
            | TokenBoolean 
            | TokenNumber
+           | TokenNull
+           | TokenIsNull
+           | TokenCons
+           | TokenHead
+           | TokenTail
 
            deriving (Show, Eq)
 
@@ -101,7 +108,7 @@ lexSymbol cs = case span isSymb cs of
                  (">", rest)  -> TokenGreater :lexer rest  
                  (">=", rest)  -> TokenGreaterThan :lexer rest  
                  ("<", rest)  -> TokenLess :lexer rest  
-                 ("<=", rest)  -> TokenLessThen : lexer rest
+                 ("<=", rest)  -> TokenLessThan : lexer rest
                  (":", rest)  -> TokenColon : lexer rest 
                  _ -> error "Lexical error: invalid symbol!"
 
@@ -116,4 +123,9 @@ lexKW cs = case span isAlpha cs of
              ("in", rest) -> TokenIn : lexer rest 
              ("Num", rest) -> TokenNumber : lexer rest 
              ("Bool", rest) -> TokenBoolean : lexer rest 
+             ("Cons", rest) -> TokenCons : lexer rest 
+             ("IsNull", rest) -> TokenIsNull : lexer rest 
+             ("Head", rest) -> TokenHead : lexer rest 
+             ("Tail", rest) -> TokenTail : lexer rest 
+             ("Null", rest) -> TokenNull : lexer rest 
              (var, rest) -> TokenVar var : lexer rest 
