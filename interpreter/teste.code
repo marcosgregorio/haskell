@@ -1,1 +1,1 @@
-if (42 == 43) then 2 * 4 else 2 + 4
+if (42 == 42) then 2 * 4 else 2 + 4
