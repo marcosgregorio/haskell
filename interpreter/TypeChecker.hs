@@ -83,9 +83,11 @@ typeof ctx (Cons e1 e2 e3) = case (typeof ctx e1, typeof ctx e2, typeof ctx e3) 
                               _ -> Nothing
 
 typeof ctx (IsNull e1) = case (typeof ctx e1) of 
-                          Just TNull -> Just TNull
+                          Just TNull -> Just TBool
                           _ -> Nothing
 
+-- typeof ctx (IsNull (Cons _ _ _)) = Just TBool
+                          
 typeof ctx (Head (Cons (e1) _ _)) = case (typeof ctx e1) of
                               (Just TNum) -> Just TNum
                               (Just TBool) -> Just TBool
@@ -95,11 +97,6 @@ typeof ctx (Tail (Cons _ e2 e3)) = case (typeof ctx e2, typeof ctx e3) of
                               (Just TNum, Just TNum) -> Just TNum
                               (Just TBool, Just TBool) -> Just TBool
                               _ -> Nothing
-
--- typeof (Tail e) ctx =
---     case typeof e ctx of
---         TList _ -> TList TBool
---         _ -> error "Type mismatch in tail operation"
 
 typecheck :: Expr -> Expr 
 typecheck e = case typeof [] e of 
