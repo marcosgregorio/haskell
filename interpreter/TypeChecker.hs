@@ -8,6 +8,7 @@ type Ctx = [(String,Ty)]
 
 typeof :: Ctx -> Expr -> Maybe Ty 
 typeof ctx BTrue = Just TBool 
+typeof ctx Null = Just TNull 
 typeof ctx BFalse = Just TBool 
 typeof ctx (Num _) = Just TNum 
 typeof ctx (Add e1 e2) = case (typeof ctx e1, typeof ctx e2) of 
@@ -75,6 +76,30 @@ typeof ctx (App e1 e2) = case (typeof ctx e1, typeof ctx e2) of
 typeof ctx (Let v e1 e2) = case typeof ctx e1 of 
                              Just t1 -> typeof ((v, t1):ctx) e2 
                              _       -> Nothing 
+
+typeof ctx (Cons e1 e2 e3) = case (typeof ctx e1, typeof ctx e2, typeof ctx e3) of
+                              (Just TNum, Just TNum, Just TNum) -> Just TNum
+                              (Just TBool, Just TBool, Just TBool) -> Just TBool
+                              _ -> Nothing
+
+typeof ctx (IsNull e1) = case (typeof ctx e1) of 
+                          Just TNull -> Just TNull
+                          _ -> Nothing
+
+typeof ctx (Head (Cons (e1) _ _)) = case (typeof ctx e1) of
+                              (Just TNum) -> Just TNum
+                              (Just TBool) -> Just TBool
+                              _ -> Nothing
+
+typeof ctx (Tail (Cons _ e2 e3)) = case (typeof ctx e2, typeof ctx e3) of
+                              (Just TNum, Just TNum) -> Just TNum
+                              (Just TBool, Just TBool) -> Just TBool
+                              _ -> Nothing
+
+-- typeof (Tail e) ctx =
+--     case typeof e ctx of
+--         TList _ -> TList TBool
+--         _ -> error "Type mismatch in tail operation"
 
 typecheck :: Expr -> Expr 
 typecheck e = case typeof [] e of 

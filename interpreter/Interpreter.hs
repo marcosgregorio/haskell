@@ -14,7 +14,9 @@ step (IsNull Null) = BTrue
 step (IsNull (Cons _ _ _)) = BFalse
 step (IsNull e1) = IsNull (step e1)
 
-step (Head (Cons x _ _)) = x 
+step (Cons e1 e2 e3) = Cons (e1) (e2) (e3)
+
+step (Head (Cons e1 _ _)) = e1 
 step (Head Null) = error "Cannot take the head of an empty list"
 step (Head e1) = Head (step e1)
 

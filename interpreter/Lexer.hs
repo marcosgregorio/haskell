@@ -35,6 +35,7 @@ data Expr = BTrue
 -- É usado no typechecker
 data Ty = TBool 
         | TNum 
+        | TNull 
         | TFun Ty Ty
         deriving (Show, Eq)
 
@@ -42,6 +43,8 @@ data Token = TokenTrue
            | TokenFalse 
            | TokenNum Int 
            | TokenAdd
+           | TokenSub
+           | TokenMult
            | TokenAnd 
            | TokenIf 
            | TokenThen 
@@ -76,7 +79,7 @@ data Token = TokenTrue
            deriving (Show, Eq)
 
 isSymb :: Char -> Bool 
-isSymb c = c `elem` "+&|-\\->()=:</"
+isSymb c = c `elem` "+&|-!*\\->()=:</"
 
 lexer :: String -> [Token]
 lexer [] = [] 
@@ -95,14 +98,16 @@ lexNum cs = case span isDigit cs of
 lexSymbol :: String -> [Token]
 lexSymbol cs = case span isSymb cs of 
                  ("+", rest)  -> TokenAdd : lexer rest 
+                 ("*", rest)  -> TokenMult : lexer rest 
+                 ("-", rest)  -> TokenSub : lexer rest 
                  ("&&", rest) -> TokenAnd : lexer rest 
                  ("\\", rest) -> TokenLam : lexer rest 
                  ("->", rest) -> TokenArrow : lexer rest 
                  ("=", rest)  -> TokenEq : lexer rest 
                  ("||", rest) -> TokenOr : lexer rest  
-                 ("-&&", rest) -> TokenNand : lexer rest  
-                 ("-||", rest) -> TokenNor : lexer rest  
-                 ("-&|", rest) -> TokenXor : lexer rest  
+                 ("!&&", rest) -> TokenNand : lexer rest  
+                 ("!||", rest) -> TokenNor : lexer rest  
+                 ("!&|", rest) -> TokenXor : lexer rest  
                  ("==", rest)  -> TokenEqual :lexer rest  
                  ("/=", rest)  -> TokenDifferent :lexer rest  
                  (">", rest)  -> TokenGreater :lexer rest  

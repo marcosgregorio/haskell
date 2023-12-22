@@ -1,1 +1,1 @@
-    if (42 == 42) then Cons else 2
+if (42 == 42) then IsNull (Null) else 2 + 4
